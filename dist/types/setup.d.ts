@@ -1,5 +1,5 @@
 import { Octokit } from "octokit";
-interface SetupArgs {
+export interface SetupArgs {
     binaries: string[];
     githubToken: string;
     octokit: Octokit;
