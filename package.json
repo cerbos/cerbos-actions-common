@@ -1,8 +1,6 @@
 {
   "name": "cerbos-actions-common",
   "description": "Shared logic for the Cerbos GitHub actions",
-  "main": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
   "exports": {
     "default": "./dist/esm/index.js",
     "import": "./dist/esm/index.js",
