@@ -14,19 +14,6 @@
     "node": "22.19.0",
     "pnpm": "10.16.1"
   },
-  "scripts": {
-    "all:parallel": "concurrently --group --prefix=none",
-    "build": "rm -rf dist && tsc --project tsconfig.cjs.json && tsc --project tsconfig.esm.json && cp package.json dist/package.json && pnpm run clean:package.json",
-    "clean:package.json": "jq 'del(.scripts)' package.json > dist/package.json",
-    "eslint:run": "NODE_OPTIONS=--max-old-space-size=3072 eslint --max-warnings=0",
-    "lint": "pnpm run all:parallel 'pnpm:lint:check:*'",
-    "lint:check:eslint": "pnpm run eslint:run src tests",
-    "lint:check:prettier": "prettier --check src tests",
-    "lint:fix": "pnpm run lint:fix:eslint && pnpm run lint:fix:prettier",
-    "lint:fix:eslint": "pnpm run eslint:run --fix src tests",
-    "lint:fix:prettier": "prettier --write src tests",
-    "test": "glob -c \"node --import tsx --no-warnings --test\" \"./tests/**/*.test.ts\""
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/cerbos/cerbos-actions-common.git"
