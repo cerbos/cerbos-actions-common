@@ -1,0 +1,46 @@
+name: 'CI'
+on:
+  pull_request:
+
+jobs:
+  lint-build-test-and-use:
+    name: Lint, Build, Test, Check and Use
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          node-version-file: '.node-version'
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: |
+          pnpm run lint
+
+      - name: Build
+        run: |
+          pnpm run build
+
+      - name: Check repo status
+        run: |
+          repo_status=$(git status --porcelain)
+          if [[ ! -z "${repo_status}" ]]; then
+            echo "::error::Uncommitted changes detected"
+            echo "${repo_status}"
+            git status -vv
+            exit 1
+          fi
+
+      - name: Test
+        run: |
+          pnpm run test
