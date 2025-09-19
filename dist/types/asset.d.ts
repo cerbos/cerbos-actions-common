@@ -1,18 +1,23 @@
+import * as environment from "./environment";
 import { Octokit } from "octokit";
+import * as version from "./version";
 import * as z from "zod";
-import { Environment } from "./environment";
-interface AssetArgs {
+interface Args {
+    repository: string;
+    owner: string;
     octokit: Octokit;
-    environment: Environment;
-    version: string;
+    environment: environment.Environment;
+    version: version.Version;
 }
-export declare const Schema: z.ZodObject<{
+export declare const schema: z.ZodObject<{
     url: z.ZodURL;
-    version: z.ZodString;
+    version: z.ZodObject<{
+        semver: z.ZodString;
+    }, z.core.$strip>;
 }, z.core.$strip>;
 export interface Asset {
     url: string;
-    version: string;
+    version: version.Version;
 }
-declare const _default: (args: AssetArgs) => Promise<Asset>;
-export default _default;
+export declare const asset: (args: Args) => Promise<Asset>;
+export {};

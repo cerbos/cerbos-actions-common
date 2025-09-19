@@ -1,65 +1,53 @@
 // Copyright 2021-2025 Zenauth Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
-import * as path from "node:path";
-import { Asset, Schema as AssetSchema } from "./asset";
 import * as core from "@actions/core";
 import * as io from "@actions/io";
 import * as tc from "@actions/tool-cache";
+import * as asset from "./asset";
+import * as available from "./available";
+import * as path from "node:path";
 import * as z from "zod";
 
-const SchemaArgs = z.object({
-  asset: AssetSchema,
+const argsSchema = z.object({
+  asset: asset.schema,
   binaries: z.array(z.string()),
 });
 
-interface DownloadArgs {
-  asset: Asset;
+interface Args {
+  asset: asset.Asset;
   binaries: string[];
 }
 
-const ValidateArgs = (args: DownloadArgs): DownloadArgs => {
-  return SchemaArgs.parse(args);
+const validateArgs = (args: Args): Args => {
+  return argsSchema.parse(args);
 };
 
-export default async (args: DownloadArgs): Promise<void> => {
-  args = ValidateArgs(args);
+export const download = async (args: Args): Promise<void> => {
+  args = validateArgs(args);
 
   const binariesToDownload = [];
   for (const binary of args.binaries) {
-    let which = "";
-    try {
-      which = await io.which(binary, true);
-    } catch (e) {
-      const err = e as Error;
-      if (!err.message.startsWith("Unable to locate executable file")) {
-        core.setFailed(JSON.stringify(err));
-        process.exit(1);
-      }
-    }
+    const av = await available.available({
+      binary: binary,
+      version: args.asset.version,
+    });
 
-    if (!which) {
-      core.info(`Failed to find binary ${binary} in PATH`);
-    }
-
-    const cached = tc.find(binary, args.asset.version);
-    if (!cached) {
-      core.info(`Failed to find binary ${binary} in tool cache`);
-    }
-
-    if (!cached && !which) {
+    if (!av.inToolCache && !av.inPath) {
       core.info(`Adding the ${binary} to the list of binaries to download`);
       binariesToDownload.push(binary);
-    } else if (cached && !which) {
-      core.info(
-        `Adding the binary ${binary} already available in the tool cache to PATH`,
-      );
-      core.addPath(cached);
-    } else if (!cached && which) {
+    } else if (av.inToolCache && !av.inPath) {
+      if (av.cachePath) {
+        core.info(
+          `Adding the binary ${binary} already available in the tool cache to PATH`,
+        );
+        core.addPath(av.cachePath);
+      }
+    } else if (!av.inToolCache && av.inPath) {
       core.info(
         `Removing the binary ${binary} from PATH and adding it to the list of binaries to (re)download`,
       );
-      io.rmRF(which);
+      io.rmRF(av.path);
       binariesToDownload.push(binary);
     } else {
       core.info(
@@ -96,7 +84,7 @@ export default async (args: DownloadArgs): Promise<void> => {
         binaryPath,
         binary,
         binary,
-        args.asset.version,
+        args.asset.version.semver,
       );
       cachedBinaryPaths.push(cachedBinaryPath);
 

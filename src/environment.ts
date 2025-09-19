@@ -5,7 +5,7 @@ import * as core from "@actions/core";
 import * as os from "os";
 import * as z from "zod";
 
-export const Schema = z.object({
+export const schema = z.object({
   architecture: z.enum(["arm64", "x86_64"]),
   platform: z.enum(["Darwin", "Linux", "Windows"]),
 });
@@ -15,11 +15,11 @@ export interface Environment {
   platform: string;
 }
 
-export const Validate = (environment: Environment): Environment => {
-  return Schema.parse(environment);
+export const validate = (environment: Environment): Environment => {
+  return schema.parse(environment);
 };
 
-export default (): Environment => {
+export const environment = (): Environment => {
   const architecture = os.arch();
   const platform = os.platform().toString();
 
@@ -48,7 +48,7 @@ export default (): Environment => {
       break;
   }
 
-  env = Validate(env);
+  env = validate(env);
   core.info(`Environment is parsed as ${JSON.stringify(env)}`);
   return env;
 };

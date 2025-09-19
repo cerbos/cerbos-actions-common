@@ -1,49 +1,38 @@
-import * as path from "node:path";
-import { Schema as AssetSchema } from "./asset";
 import * as core from "@actions/core";
 import * as io from "@actions/io";
 import * as tc from "@actions/tool-cache";
+import * as asset from "./asset";
+import * as available from "./available";
+import * as path from "node:path";
 import * as z from "zod";
-const SchemaArgs = z.object({
-    asset: AssetSchema,
+const argsSchema = z.object({
+    asset: asset.schema,
     binaries: z.array(z.string()),
 });
-const ValidateArgs = (args) => {
-    return SchemaArgs.parse(args);
+const validateArgs = (args) => {
+    return argsSchema.parse(args);
 };
-export default async (args) => {
-    args = ValidateArgs(args);
+export const download = async (args) => {
+    args = validateArgs(args);
     const binariesToDownload = [];
     for (const binary of args.binaries) {
-        let which = "";
-        try {
-            which = await io.which(binary, true);
-        }
-        catch (e) {
-            const err = e;
-            if (!err.message.startsWith("Unable to locate executable file")) {
-                core.setFailed(JSON.stringify(err));
-                process.exit(1);
-            }
-        }
-        if (!which) {
-            core.info(`Failed to find binary ${binary} in PATH`);
-        }
-        const cached = tc.find(binary, args.asset.version);
-        if (!cached) {
-            core.info(`Failed to find binary ${binary} in tool cache`);
-        }
-        if (!cached && !which) {
+        const av = await available.available({
+            binary: binary,
+            version: args.asset.version,
+        });
+        if (!av.inToolCache && !av.inPath) {
             core.info(`Adding the ${binary} to the list of binaries to download`);
             binariesToDownload.push(binary);
         }
-        else if (cached && !which) {
-            core.info(`Adding the binary ${binary} already available in the tool cache to PATH`);
-            core.addPath(cached);
+        else if (av.inToolCache && !av.inPath) {
+            if (av.cachePath) {
+                core.info(`Adding the binary ${binary} already available in the tool cache to PATH`);
+                core.addPath(av.cachePath);
+            }
         }
-        else if (!cached && which) {
+        else if (!av.inToolCache && av.inPath) {
             core.info(`Removing the binary ${binary} from PATH and adding it to the list of binaries to (re)download`);
-            io.rmRF(which);
+            io.rmRF(av.path);
             binariesToDownload.push(binary);
         }
         else {
@@ -70,7 +59,7 @@ export default async (args) => {
         core.info(`Adding the following binaries to the tool cache if exists in the downloaded asset: ${binariesToDownload}`);
         for (const binary of binariesToDownload) {
             const binaryPath = path.join(extractedAsset, binary);
-            const cachedBinaryPath = await tc.cacheFile(binaryPath, binary, binary, args.asset.version);
+            const cachedBinaryPath = await tc.cacheFile(binaryPath, binary, binary, args.asset.version.semver);
             cachedBinaryPaths.push(cachedBinaryPath);
             core.info(`The binary ${binary} at ${cachedBinaryPath} is added to the tool cache`);
         }

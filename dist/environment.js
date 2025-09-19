@@ -1,14 +1,14 @@
 import * as core from "@actions/core";
 import * as os from "os";
 import * as z from "zod";
-export const Schema = z.object({
+export const schema = z.object({
     architecture: z.enum(["arm64", "x86_64"]),
     platform: z.enum(["Darwin", "Linux", "Windows"]),
 });
-export const Validate = (environment) => {
-    return Schema.parse(environment);
+export const validate = (environment) => {
+    return schema.parse(environment);
 };
-export default () => {
+export const environment = () => {
     const architecture = os.arch();
     const platform = os.platform().toString();
     let env = {
@@ -34,7 +34,7 @@ export default () => {
             env.platform = "Windows";
             break;
     }
-    env = Validate(env);
+    env = validate(env);
     core.info(`Environment is parsed as ${JSON.stringify(env)}`);
     return env;
 };

@@ -1,60 +1,51 @@
 // Copyright 2021-2025 Zenauth Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
+import * as asset from "./asset";
+import * as download from "./download";
+import * as environment from "./environment";
 import { Octokit } from "octokit";
-import Asset from "./asset";
-import Download from "./download";
-import Environment from "./environment";
-import { HttpsProxyAgent } from "https-proxy-agent";
+import * as version from "./version";
 import * as z from "zod";
 
-const SchemaArgs = z.object({
-  binaries: z.array(z.string()),
+const owner = "cerbos";
+const repository = "cerbos";
+
+const argsSchema = z.object({
+  binaries: z.array(z.string().nonempty()),
   githubToken: z.string(),
   octokit: z.instanceof(Octokit),
-  version: z.union([
-    z.literal(""),
-    z.literal("latest"),
-    z
-      .string()
-      .regex(
-        /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
-      ),
-  ]),
+  version: version.versionSchema,
 });
 
-export interface SetupArgs {
+export interface Args {
   binaries: string[];
   githubToken: string;
   octokit: Octokit;
   version: string;
 }
 
-const ValidateArgs = (args: SetupArgs): SetupArgs => {
-  return SchemaArgs.parse(args);
+const validateArgs = (args: Args): Args => {
+  return argsSchema.parse(args);
 };
 
-export default async (args: SetupArgs) => {
-  args = ValidateArgs(args);
+export const setup = async (args: Args) => {
+  args = validateArgs(args);
 
-  const octokit = new Octokit({
-    auth: args.githubToken,
-    request: {
-      agent: process.env.http_proxy
-        ? new HttpsProxyAgent(process.env.http_proxy)
-        : undefined,
-      fetch,
-    },
-    userAgent: process.env["GITHUB_REPOSITORY"]
-      ? process.env["GITHUB_REPOSITORY"]
-      : "cerbos-actions-common",
+  const ver = await version.version({
+    owner: owner,
+    repository: repository,
+    octokit: args.octokit,
+    version: args.version,
   });
 
-  Download({
-    asset: await Asset({
-      environment: Environment(),
-      octokit: octokit,
-      version: args.version,
+  download.download({
+    asset: await asset.asset({
+      owner: owner,
+      repository: repository,
+      environment: environment.environment(),
+      octokit: args.octokit,
+      version: ver,
     }),
     binaries: args.binaries,
   });

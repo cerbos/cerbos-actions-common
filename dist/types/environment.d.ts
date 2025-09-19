@@ -1,5 +1,5 @@
 import * as z from "zod";
-export declare const Schema: z.ZodObject<{
+export declare const schema: z.ZodObject<{
     architecture: z.ZodEnum<{
         arm64: "arm64";
         x86_64: "x86_64";
@@ -14,6 +14,5 @@ export interface Environment {
     architecture: string;
     platform: string;
 }
-export declare const Validate: (environment: Environment) => Environment;
-declare const _default: () => Environment;
-export default _default;
+export declare const validate: (environment: Environment) => Environment;
+export declare const environment: () => Environment;

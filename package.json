@@ -16,10 +16,6 @@
     ".": {
       "default": "./dist/index.js",
       "types": "./dist/types/index.d.ts"
-    },
-    "./setup": {
-      "default": "./dist/setup.js",
-      "types": "./dist/types/setup.d.ts"
     }
   },
   "scripts": {
@@ -48,7 +44,6 @@
     "@actions/core": "^1.11.1",
     "@actions/io": "^1.1.3",
     "@actions/tool-cache": "^2.0.2",
-    "https-proxy-agent": "^7.0.6",
     "octokit": "^5.0.3",
     "zod": "^4.1.9"
   },

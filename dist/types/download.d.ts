@@ -1,7 +1,7 @@
-import { Asset } from "./asset";
-interface DownloadArgs {
-    asset: Asset;
+import * as asset from "./asset";
+interface Args {
+    asset: asset.Asset;
     binaries: string[];
 }
-declare const _default: (args: DownloadArgs) => Promise<void>;
-export default _default;
+export declare const download: (args: Args) => Promise<void>;
+export {};
