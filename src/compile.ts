@@ -34,19 +34,25 @@ export const compile = async (args: Args) => {
   })
   if (!av.inPath) {
     core.setFailed(
-      'Failed to find cerbos binary in PATH, please add https://github.com/cerbos/cerbos-setup-action action to your workflow.'
+      `Failed to find binary ${binaryCerbos} in PATH, please add https://github.com/cerbos/cerbos-setup-action action to your workflow.`
     )
     process.exit(1)
   }
 
   const workspaceDir = process.env[workspaceEnvKey]
+  if (!workspaceDir) {
+    core.setFailed(
+      `Environment variable ${workspaceEnvKey} is not set by the workflow runner.`
+    )
+    process.exit(1)
+  }
 
-  const absPoliciesDir = path.join(workspaceDir as string, args.policiesDir)
+  const absPoliciesDir = path.join(workspaceDir, args.policiesDir)
   core.info(`Policies directory is set to ${absPoliciesDir}`)
 
-  let command = `${av.inPath} compile ${absPoliciesDir}`
+  let command = `${av.path} compile ${absPoliciesDir}`
   if (args.testsDir && args.testsDir !== '') {
-    const absTestsDir = path.join(workspaceDir as string, args.testsDir)
+    const absTestsDir = path.join(workspaceDir, args.testsDir)
     core.info(`Tests directory is set to ${absTestsDir}`)
 
     command += ` --tests ${absTestsDir}`
@@ -70,7 +76,7 @@ export const compile = async (args: Args) => {
           break
         default:
           exitCode = 1
-          core.setFailed(`Failed to launch Cerbos`)
+          core.setFailed(`Failed to run Cerbos`)
           break
       }
 
@@ -79,6 +85,7 @@ export const compile = async (args: Args) => {
 
     if (stderr) {
       if (exitCode === 0) {
+        core.setFailed(`An error occured`)
         exitCode = 1
       }
 
