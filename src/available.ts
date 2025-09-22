@@ -4,7 +4,7 @@
 import * as core from "@actions/core";
 import * as io from "@actions/io";
 import * as tc from "@actions/tool-cache";
-import * as version from "./version";
+import * as version from "./version.js";
 import * as z from "zod";
 
 const argsSchema = z.object({

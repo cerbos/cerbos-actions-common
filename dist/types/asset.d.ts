@@ -1,6 +1,6 @@
-import * as environment from "./environment";
+import * as environment from "./environment.js";
 import { Octokit } from "octokit";
-import * as version from "./version";
+import * as version from "./version.js";
 import * as z from "zod";
 interface Args {
     repository: string;

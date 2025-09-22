@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import * as available from "./available";
+import * as available from "./available.js";
 import * as child from "child_process";
 import * as path from "path";
 import * as z from "zod";

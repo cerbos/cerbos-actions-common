@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as core from "@actions/core";
-import * as environment from "./environment";
+import * as environment from "./environment.js";
 import { Octokit } from "octokit";
-import * as version from "./version";
+import * as version from "./version.js";
 import * as z from "zod";
 
 const argsSchema = z.object({

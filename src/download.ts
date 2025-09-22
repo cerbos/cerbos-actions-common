@@ -4,8 +4,8 @@
 import * as core from "@actions/core";
 import * as io from "@actions/io";
 import * as tc from "@actions/tool-cache";
-import * as asset from "./asset";
-import * as available from "./available";
+import * as asset from "./asset.js";
+import * as available from "./available.js";
 import * as path from "node:path";
 import * as z from "zod";
 
