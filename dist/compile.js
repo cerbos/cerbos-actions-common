@@ -26,7 +26,7 @@ export const compile = async (args) => {
     const workspaceDir = process.env[workspaceEnvKey];
     const absPoliciesDir = path.join(workspaceDir, args.policiesDir);
     core.info(`Policies directory is set to ${absPoliciesDir}`);
-    let command = `${path} compile ${absPoliciesDir}`;
+    let command = `${av.inPath} compile ${absPoliciesDir}`;
     if (args.testsDir && args.testsDir !== '') {
         const absTestsDir = path.join(workspaceDir, args.testsDir);
         core.info(`Tests directory is set to ${absTestsDir}`);
