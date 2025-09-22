@@ -1,13 +1,13 @@
-import * as core from "@actions/core";
-import * as io from "@actions/io";
-import * as tc from "@actions/tool-cache";
-import * as asset from "./asset.js";
-import * as available from "./available.js";
-import * as path from "node:path";
-import * as z from "zod";
+import * as core from '@actions/core';
+import * as io from '@actions/io';
+import * as tc from '@actions/tool-cache';
+import * as asset from './asset.js';
+import * as available from './available.js';
+import * as path from 'node:path';
+import * as z from 'zod';
 const argsSchema = z.object({
     asset: asset.schema,
-    binaries: z.array(z.string()),
+    binaries: z.array(z.string())
 });
 const validateArgs = (args) => {
     return argsSchema.parse(args);
@@ -18,7 +18,7 @@ export const download = async (args) => {
     for (const binary of args.binaries) {
         const av = await available.available({
             binary: binary,
-            version: args.asset.version,
+            version: args.asset.version
         });
         if (!av.inToolCache && !av.inPath) {
             core.info(`Adding the ${binary} to the list of binaries to download`);
@@ -43,7 +43,7 @@ export const download = async (args) => {
         core.info(`Found all binaries in the tool cache. Skipping...`);
         return;
     }
-    let extractedAsset = "";
+    let extractedAsset = '';
     try {
         core.info(`Downloading the asset from URL ${args.asset.url}`);
         const asset = await tc.downloadTool(args.asset.url);

@@ -1,4 +1,4 @@
-import * as z from "zod";
+import * as z from 'zod';
 export declare const schema: z.ZodObject<{
     architecture: z.ZodEnum<{
         arm64: "arm64";

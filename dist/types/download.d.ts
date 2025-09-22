@@ -1,4 +1,4 @@
-import * as asset from "./asset.js";
+import * as asset from './asset.js';
 interface Args {
     asset: asset.Asset;
     binaries: string[];

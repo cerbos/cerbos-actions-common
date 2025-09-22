@@ -1,5 +1,5 @@
-import { Octokit } from "octokit";
-import * as z from "zod";
+import { Octokit } from 'octokit';
+import * as z from 'zod';
 export declare const versionSchema: z.ZodUnion<readonly [z.ZodLiteral<"">, z.ZodLiteral<"latest">, z.ZodString]>;
 export declare const semVerSchema: z.ZodString;
 interface Args {

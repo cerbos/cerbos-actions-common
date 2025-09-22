@@ -1,4 +1,4 @@
-import * as version from "./version.js";
+import * as version from './version.js';
 interface Args {
     binary: string;
     version?: version.Version;
