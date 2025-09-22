@@ -34,7 +34,7 @@ export const download = async (args: Args): Promise<void> => {
     })
 
     if (!av.inToolCache && !av.inPath) {
-      core.info(`Adding the ${binary} to the list of binaries to download`)
+      core.info(`Adding the binary ${binary} to the list of binaries to download`)
       binariesToDownload.push(binary)
     } else if (av.inToolCache && !av.inPath) {
       if (av.cachePath) {
