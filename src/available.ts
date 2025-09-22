@@ -58,7 +58,9 @@ export const available = async (args: Args): Promise<Available> => {
   }
 
   if (!args.version) {
-    core.warning(`Skipped finding binary ${args.binary} in tool cache`)
+    core.info(
+      `Skipped looking for binary ${args.binary} in tool cache due to no version being specified`
+    )
     return validate({
       inPath: path !== '',
       path: path
