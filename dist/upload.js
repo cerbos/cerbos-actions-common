@@ -8,8 +8,8 @@ const argsSchema = z.object({
     clientID: z.string().nonempty(),
     clientSecret: z.string().nonempty(),
     storeID: z.string().nonempty(),
-    fromRevision: z.string().default('HEAD~1'),
-    toRevision: z.string().default('HEAD'),
+    fromRevision: z.string().nonempty(),
+    toRevision: z.string().nonempty(),
     subDir: z.string().optional()
 });
 const validateArgs = (args) => {
