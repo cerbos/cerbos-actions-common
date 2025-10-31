@@ -23,7 +23,7 @@ export const setup = async (args) => {
         octokit: args.octokit,
         version: args.version
     });
-    download.download({
+    await download.download({
         asset: await asset.asset({
             owner: owner,
             repository: repository,
