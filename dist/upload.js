@@ -5,6 +5,7 @@ import * as z from 'zod';
 const binaryCerbosctl = 'cerbosctl';
 const workspaceEnvKey = 'GITHUB_WORKSPACE';
 const argsSchema = z.object({
+    apiEndpoint: z.httpUrl().nonempty(),
     clientID: z.string().nonempty(),
     clientSecret: z.string().nonempty(),
     storeID: z.string().nonempty(),
@@ -29,7 +30,7 @@ export const upload = async (args) => {
         core.setFailed(`Environment variable ${workspaceEnvKey} is not set by the workflow runner.`);
         process.exit(1);
     }
-    let command = `${av.path} upload-git ${args.fromRevision} ${args.toRevision} --path=${workspaceDir} --store-id=${args.storeID} --client-id=${args.clientID} --client-secret=${args.clientSecret}`;
+    let command = `${av.path} hub store upload-git ${args.fromRevision} ${args.toRevision} --path=${workspaceDir} --api-endpoint="${args.apiEndpoint}" --store-id=${args.storeID} --client-id=${args.clientID} --client-secret=${args.clientSecret}`;
     if (args.subDir && args.subDir !== '') {
         core.info(`Subdirectory is set to ${args.subDir}`);
         command += ` --subdir ${args.subDir}`;

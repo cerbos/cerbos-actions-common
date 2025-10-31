@@ -1,4 +1,5 @@
 interface Args {
+    apiEndpoint: string;
     clientID: string;
     clientSecret: string;
     storeID: string;
