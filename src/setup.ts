@@ -39,7 +39,7 @@ export const setup = async (args: Args) => {
     version: args.version
   })
 
-  download.download({
+  await download.download({
     asset: await asset.asset({
       owner: owner,
       repository: repository,
