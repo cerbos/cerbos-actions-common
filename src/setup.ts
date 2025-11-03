@@ -13,14 +13,12 @@ const repository = 'cerbos'
 
 const argsSchema = z.object({
   binaries: z.array(z.string().nonempty()),
-  githubToken: z.string(),
   octokit: z.instanceof(Octokit),
   version: version.versionSchema
 })
 
 export interface Args {
   binaries: string[]
-  githubToken: string
   octokit: Octokit
   version: string
 }
