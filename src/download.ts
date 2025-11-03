@@ -11,7 +11,7 @@ import * as z from 'zod'
 
 const argsSchema = z.object({
   asset: asset.schema,
-  binaries: z.array(z.string())
+  binaries: z.array(z.string().nonempty()).nonempty()
 })
 
 interface Args {

@@ -7,7 +7,7 @@ import * as path from 'node:path';
 import * as z from 'zod';
 const argsSchema = z.object({
     asset: asset.schema,
-    binaries: z.array(z.string())
+    binaries: z.array(z.string().nonempty()).nonempty()
 });
 const validateArgs = (args) => {
     return argsSchema.parse(args);

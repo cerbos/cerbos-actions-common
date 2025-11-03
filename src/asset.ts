@@ -8,8 +8,8 @@ import * as version from './version.js'
 import * as z from 'zod'
 
 const argsSchema = z.object({
-  repository: z.string(),
-  owner: z.string(),
+  repository: z.string().nonempty(),
+  owner: z.string().nonempty(),
   environment: environment.schema,
   octokit: z.instanceof(Octokit),
   version: version.schema
@@ -28,7 +28,7 @@ const validateArgs = (args: Args): Args => {
 }
 
 export const schema = z.object({
-  url: z.url(),
+  url: z.url().nonempty(),
   version: version.schema
 })
 

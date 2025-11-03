@@ -8,7 +8,7 @@ import * as version from './version.js'
 import * as z from 'zod'
 
 const argsSchema = z.object({
-  binary: z.string(),
+  binary: z.string().nonempty(),
   version: version.schema.optional()
 })
 

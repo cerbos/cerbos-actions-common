@@ -7,7 +7,7 @@ import * as z from 'zod';
 const owner = 'cerbos';
 const repository = 'cerbos';
 const argsSchema = z.object({
-    binaries: z.array(z.string().nonempty()),
+    binaries: z.array(z.string().nonempty()).nonempty(),
     octokit: z.instanceof(Octokit),
     version: version.versionSchema
 });
