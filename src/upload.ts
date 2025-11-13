@@ -11,8 +11,8 @@ const argsSchema = z.object({
   clientID: z.string().nonempty(),
   clientSecret: z.string().nonempty(),
   storeID: z.string().nonempty(),
-  fromRevision: z.string().nonempty(),
-  toRevision: z.string().nonempty(),
+  fromRevision: z.string().optional(),
+  toRevision: z.string().optional(),
   subDir: z.string().optional()
 })
 
@@ -21,8 +21,8 @@ interface Args {
   clientID: string
   clientSecret: string
   storeID: string
-  fromRevision: string
-  toRevision: string
+  fromRevision?: string
+  toRevision?: string
   subDir?: string
 }
 
@@ -51,12 +51,26 @@ export const upload = async (args: Args) => {
     process.exit(1)
   }
 
-  let command = `${av.path} hub store upload-git ${args.fromRevision} ${args.toRevision} --path=${workspaceDir} --api-endpoint="${args.apiEndpoint}" --store-id=${args.storeID} --client-id=${args.clientID} --client-secret=${args.clientSecret}`
+  let command = `${av.path} hub store upload-git --path=${workspaceDir} --api-endpoint="${args.apiEndpoint}" --store-id=${args.storeID} --client-id=${args.clientID} --client-secret=${args.clientSecret}`
   if (args.subDir && args.subDir !== '') {
-    core.info(`Subdirectory is set to ${args.subDir}`)
-    command += ` --subdir ${args.subDir}`
+    core.info(`--subdir is set to ${args.subDir}`)
+    command += ` --subdir=${args.subDir}`
   } else {
-    core.info('Subdirectory is not set')
+    core.info('--subdir is not set')
+  }
+
+  if (args.fromRevision && args.fromRevision !== '') {
+    core.info(`--from is set to ${args.fromRevision}`)
+    command += ` --from=${args.fromRevision}`
+  } else {
+    core.info('--from is not set')
+  }
+
+  if (args.toRevision && args.toRevision !== '') {
+    core.info(`--to is set to ${args.toRevision}`)
+    command += ` --to=${args.toRevision}`
+  } else {
+    core.info('--to is not set')
   }
 
   core.info(`The command to run is: ${command}`)
