@@ -39,7 +39,7 @@
   "author": "Cerbos",
   "license": "Apache-2.0",
   "dependencies": {
-    "@actions/core": "1.11.1",
+    "@actions/core": "2.0.1",
     "@actions/io": "2.0.0",
     "@actions/tool-cache": "2.0.2",
     "octokit": "5.0.5",
