@@ -1,10 +1,10 @@
 {
   "name": "cerbos-actions-common",
   "description": "Shared logic for the Cerbos GitHub actions",
-  "packageManager": "pnpm@10.24.0+sha512.01ff8ae71b4419903b65c60fb2dc9d34cf8bb6e06d03bde112ef38f7a34d6904c424ba66bea5cdcf12890230bf39f9580473140ed9c946fef328b6e5238a345a",
+  "packageManager": "pnpm@10.27.0+sha512.72d699da16b1179c14ba9e64dc71c9a40988cbdc65c264cb0e489db7de917f20dcf4d64d8723625f2969ba52d4b7e2a1170682d9ac2a5dcaeaab732b7e16f04a",
   "engines": {
-    "node": "24.11.1",
-    "pnpm": "10.24.0"
+    "node": "24.12.0",
+    "pnpm": "10.27.0"
   },
   "files": [
     "dist/**/*"
@@ -43,18 +43,18 @@
     "@actions/io": "2.0.0",
     "@actions/tool-cache": "2.0.2",
     "octokit": "5.0.5",
-    "zod": "4.1.13"
+    "zod": "4.3.5"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.1",
-    "@types/node": "24.10.1",
+    "@eslint/js": "9.39.2",
+    "@types/node": "24.10.4",
     "concurrently": "9.2.1",
-    "eslint": "9.39.1",
+    "eslint": "9.39.2",
     "glob-bin": "1.0.0",
     "globals": "17.0.0",
-    "prettier": "3.7.3",
+    "prettier": "3.7.4",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.48.0"
+    "typescript-eslint": "8.51.0"
   }
 }
