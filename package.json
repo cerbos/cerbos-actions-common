@@ -40,7 +40,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@actions/core": "3.0.0",
-    "@actions/io": "2.0.0",
+    "@actions/io": "3.0.2",
     "@actions/tool-cache": "3.0.1",
     "octokit": "5.0.5",
     "zod": "4.3.6"
