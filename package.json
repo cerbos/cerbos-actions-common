@@ -46,7 +46,7 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.2",
+    "@eslint/js": "10.0.1",
     "@types/node": "24.10.13",
     "concurrently": "9.2.1",
     "eslint": "9.39.2",
