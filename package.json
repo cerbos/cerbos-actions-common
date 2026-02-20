@@ -1,10 +1,10 @@
 {
   "name": "cerbos-actions-common",
   "description": "Shared logic for the Cerbos GitHub actions",
-  "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264",
+  "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
   "engines": {
-    "node": "24.13.0",
-    "pnpm": "10.28.2"
+    "node": "24.13.1",
+    "pnpm": "10.29.3"
   },
   "files": [
     "dist/**/*"
@@ -47,14 +47,14 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.2",
-    "@types/node": "24.10.9",
+    "@types/node": "24.10.13",
     "concurrently": "9.2.1",
     "eslint": "9.39.2",
-    "glob-bin": "1.0.0",
+    "glob-bin": "1.1.0",
     "globals": "17.3.0",
     "prettier": "3.8.1",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.54.0"
+    "typescript-eslint": "8.55.0"
   }
 }
