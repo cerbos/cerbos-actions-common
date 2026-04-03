@@ -1,18 +1,26 @@
 {
-   "compilerOptions": {
-      "module": "NodeNext",
-      "moduleResolution": "NodeNext",
-      "target": "ESNext",
-      "strict": true,
-      "noImplicitAny": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "removeComments": true,
-      "declaration": true,
-      "sourceMap": true,
-      "outDir": "dist",
-      "declarationDir": "dist/types"
-   },
-   "include": ["src/**/*"],
-   "exclude": ["node_modules", "dist", "tests"]
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "declarationDir": "dist/types",
+    "types": ["node"],
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "removeComments": true,
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests"
+  ]
 }
