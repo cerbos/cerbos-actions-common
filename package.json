@@ -44,7 +44,7 @@
     "@actions/io": "3.0.2",
     "@actions/tool-cache": "4.0.0",
     "octokit": "5.0.5",
-    "zod": "4.4.3"
+    "zod": "4.5.2"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
