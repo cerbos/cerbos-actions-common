@@ -52,13 +52,23 @@ export const version = async (args: Args): Promise<Version> => {
 
   let semver = ''
   if (args.version === '' || args.version === 'latest') {
-    const {data} = await args.octokit.request(
-      'GET /repos/{owner}/{repo}/releases/latest',
-      {
-        owner: args.owner,
-        repo: args.repository
-      }
-    )
+    let data
+    try {
+      const response = await args.octokit.request(
+        'GET /repos/{owner}/{repo}/releases/latest',
+        {
+          owner: args.owner,
+          repo: args.repository
+        }
+      )
+      data = response.data
+    } catch (error) {
+      const err = error as Error
+      core.setFailed(
+        `Failed to fetch releases from GitHub API: ${JSON.stringify(err)}}`
+      )
+      return process.exit(1)
+    }
 
     semver = data.tag_name.split('v')[1]
   } else if (args.version.startsWith('v')) {

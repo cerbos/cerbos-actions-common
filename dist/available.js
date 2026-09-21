@@ -25,8 +25,8 @@ export const available = async (args) => {
     try {
         path = await io.which(args.binary, true);
     }
-    catch (e) {
-        const err = e;
+    catch (error) {
+        const err = error;
         if (!err.message.startsWith('Unable to locate executable file')) {
             core.setFailed(JSON.stringify(err));
             process.exit(1);

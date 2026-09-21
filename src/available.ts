@@ -45,8 +45,8 @@ export const available = async (args: Args): Promise<Available> => {
   let path = ''
   try {
     path = await io.which(args.binary, true)
-  } catch (e) {
-    const err = e as Error
+  } catch (error) {
+    const err = error as Error
     if (!err.message.startsWith('Unable to locate executable file')) {
       core.setFailed(JSON.stringify(err))
       process.exit(1)
