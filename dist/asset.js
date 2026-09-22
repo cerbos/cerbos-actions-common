@@ -24,10 +24,19 @@ export const asset = async (args) => {
     args = validateArgs(args);
     const assetName = `cerbos_${args.version.semver}_${args.environment.platform}_${args.environment.architecture}.tar.gz`;
     core.info(`The asset name to look for resolved to ${assetName}`);
-    const { data: releases } = await args.octokit.request('GET /repos/{owner}/{repo}/releases', {
-        owner: args.owner,
-        repo: args.repository
-    });
+    let releases;
+    try {
+        const response = await args.octokit.request('GET /repos/{owner}/{repo}/releases', {
+            owner: args.owner,
+            repo: args.repository
+        });
+        releases = response.data;
+    }
+    catch (error) {
+        const err = error;
+        core.setFailed(`Failed to fetch releases from GitHub API: ${JSON.stringify(err)}}`);
+        return process.exit(1);
+    }
     for (const release of releases) {
         for (const asset of release.assets) {
             if (asset.name === assetName) {
