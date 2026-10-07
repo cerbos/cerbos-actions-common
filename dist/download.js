@@ -1,13 +1,13 @@
-import * as core from '@actions/core';
-import * as io from '@actions/io';
-import * as tc from '@actions/tool-cache';
-import * as asset from './asset.js';
-import * as available from './available.js';
-import * as path from 'node:path';
-import * as z from 'zod';
+import * as path from "node:path";
+import * as core from "@actions/core";
+import * as io from "@actions/io";
+import * as tc from "@actions/tool-cache";
+import * as z from "zod";
+import * as asset from "./asset.js";
+import * as available from "./available.js";
 const argsSchema = z.object({
     asset: asset.schema,
-    binaries: z.array(z.string().nonempty()).nonempty()
+    binaries: z.array(z.string().nonempty()).nonempty(),
 });
 const validateArgs = (args) => {
     return argsSchema.parse(args);
@@ -18,7 +18,7 @@ export const download = async (args) => {
     for (const binary of args.binaries) {
         const av = await available.available({
             binary: binary,
-            version: args.asset.version
+            version: args.asset.version,
         });
         if (!av.inToolCache && !av.inPath) {
             core.info(`Adding the binary ${binary} to the list of binaries to download`);
@@ -32,7 +32,7 @@ export const download = async (args) => {
         }
         else if (!av.inToolCache && av.inPath) {
             core.info(`Removing the binary ${binary} from PATH and adding it to the list of binaries to (re)download`);
-            io.rmRF(av.path);
+            await io.rmRF(av.path);
             binariesToDownload.push(binary);
         }
         else {
@@ -43,7 +43,7 @@ export const download = async (args) => {
         core.info(`Found all binaries in the tool cache. Skipping...`);
         return;
     }
-    let extractedAsset = '';
+    let extractedAsset = "";
     try {
         core.info(`Downloading the asset from URL ${args.asset.url}`);
         const asset = await tc.downloadTool(args.asset.url);
@@ -51,12 +51,12 @@ export const download = async (args) => {
         core.info(`Successfully extracted downloaded asset to ${extractedAsset}`);
     }
     catch (error) {
-        core.setFailed(`Error occured during retrieval of the archive: ${error}`);
+        core.setFailed(`Error occured during retrieval of the archive: ${error instanceof Error ? error.message : String(error)}`);
         process.exit(1);
     }
     const cachedBinaryPaths = [];
     try {
-        core.info(`Adding the following binaries to the tool cache if exists in the downloaded asset: ${binariesToDownload}`);
+        core.info(`Adding the following binaries to the tool cache if exists in the downloaded asset: ${binariesToDownload.join(", ")}`);
         for (const binary of binariesToDownload) {
             const binaryPath = path.join(extractedAsset, binary);
             const cachedBinaryPath = await tc.cacheFile(binaryPath, binary, binary, args.asset.version.semver);
@@ -65,7 +65,7 @@ export const download = async (args) => {
         }
     }
     catch (error) {
-        core.setFailed(`Error occured while adding binaries to the tool cache: ${error}`);
+        core.setFailed(`Error occured while adding binaries to the tool cache: ${error instanceof Error ? error.message : String(error)}`);
         process.exit(1);
     }
     try {
@@ -75,7 +75,7 @@ export const download = async (args) => {
         }
     }
     catch (error) {
-        core.setFailed(`Error occured while adding binaries from the tool cache to PATH: ${error}`);
+        core.setFailed(`Error occured while adding binaries from the tool cache to PATH: ${error instanceof Error ? error.message : String(error)}`);
         process.exit(1);
     }
 };

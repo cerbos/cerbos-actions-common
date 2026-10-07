@@ -1,7 +1,7 @@
-import * as environment from './environment.js';
-import { Octokit } from 'octokit';
-import * as version from './version.js';
-import * as z from 'zod';
+import { Octokit } from "octokit";
+import * as z from "zod";
+import * as environment from "./environment.js";
+import * as version from "./version.js";
 interface Args {
     repository: string;
     owner: string;

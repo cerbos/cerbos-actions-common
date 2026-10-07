@@ -1,21 +1,21 @@
-import * as core from '@actions/core';
-import * as environment from './environment.js';
-import { Octokit } from 'octokit';
-import * as version from './version.js';
-import * as z from 'zod';
+import * as core from "@actions/core";
+import { Octokit } from "octokit";
+import * as z from "zod";
+import * as environment from "./environment.js";
+import * as version from "./version.js";
 const argsSchema = z.object({
     repository: z.string().nonempty(),
     owner: z.string().nonempty(),
     environment: environment.schema,
     octokit: z.instanceof(Octokit),
-    version: version.schema
+    version: version.schema,
 });
 const validateArgs = (args) => {
     return argsSchema.parse(args);
 };
 export const schema = z.object({
     url: z.url().nonempty(),
-    version: version.schema
+    version: version.schema,
 });
 const validate = (asset) => {
     return schema.parse(asset);
@@ -26,9 +26,9 @@ export const asset = async (args) => {
     core.info(`The asset name to look for resolved to ${assetName}`);
     let releases;
     try {
-        const response = await args.octokit.request('GET /repos/{owner}/{repo}/releases', {
+        const response = await args.octokit.request("GET /repos/{owner}/{repo}/releases", {
             owner: args.owner,
-            repo: args.repository
+            repo: args.repository,
         });
         releases = response.data;
     }
@@ -42,7 +42,7 @@ export const asset = async (args) => {
             if (asset.name === assetName) {
                 const a = validate({
                     version: args.version,
-                    url: asset.browser_download_url
+                    url: asset.browser_download_url,
                 });
                 core.info(`The asset is resolved to ${JSON.stringify(a)}`);
                 return a;
