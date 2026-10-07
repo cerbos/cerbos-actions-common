@@ -1,10 +1,15 @@
 {
   "name": "cerbos-actions-common",
   "description": "Shared logic for the Cerbos GitHub actions",
-  "packageManager": "pnpm@12.8.2+sha512.a5941679663d952c5f0ecc38ba98af98b4dc01b95780354f6894f2f873973cef2f7e2989d7db3ee5393938ae21f62fe06bcdf685d475ddad829a62095d2b8b11",
-  "engines": {
-    "node": "24.21.0",
-    "pnpm": "12.8.2"
+  "keywords": [
+    "actions",
+    "common"
+  ],
+  "license": "Apache-2.0",
+  "author": "Cerbos",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cerbos/cerbos-actions-common.git"
   },
   "files": [
     "dist/**/*"
@@ -20,25 +25,16 @@
     "all:parallel": "pnpm --no-bail --aggregate-output --reporter=append-only --reporter-hide-prefix run",
     "build": "rm -rf dist && pnpm run build:tsc",
     "build:tsc": "tsc --project tsconfig.json",
-    "eslint:run": "NODE_OPTIONS=--max-old-space-size=3072 eslint --max-warnings=0",
     "lint": "pnpm run build:tsc && pnpm run all:parallel /^lint:check:/",
-    "lint:check:eslint": "pnpm run eslint:run src tests",
-    "lint:check:prettier": "prettier --check src tests",
-    "lint:fix": "pnpm run lint:fix:eslint && pnpm run lint:fix:prettier",
-    "lint:fix:eslint": "pnpm run eslint:run --fix src tests",
-    "lint:fix:prettier": "prettier --write src tests",
+    "lint:check:oxfmt": "pnpm run oxfmt --check",
+    "lint:check:oxlint": "pnpm run oxlint --deny-warnings --report-unused-disable-directives",
+    "lint:fix": "pnpm run lint:fix:oxlint && pnpm run lint:fix:oxfmt",
+    "lint:fix:oxfmt": "pnpm run oxfmt",
+    "lint:fix:oxlint": "pnpm run oxlint --fix",
+    "oxfmt": "oxfmt",
+    "oxlint": "oxlint --type-aware",
     "test": "glob-bin -c \"node --import tsx --no-warnings --test\" \"./tests/**/*.test.ts\""
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cerbos/cerbos-actions-common.git"
-  },
-  "keywords": [
-    "common",
-    "actions"
-  ],
-  "author": "Cerbos",
-  "license": "Apache-2.0",
   "dependencies": {
     "@actions/core": "3.0.1",
     "@actions/io": "3.0.2",
@@ -47,14 +43,18 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@eslint/js": "10.0.1",
     "@types/node": "25.9.8",
-    "eslint": "10.11.0",
     "glob-bin": "1.1.0",
-    "globals": "17.13.0",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
+    "oxlint-tsgolint": "^7.0.2003",
     "prettier": "3.9.9",
     "tsx": "4.23.15",
-    "typescript": "6.0.3",
-    "typescript-eslint": "8.71.0"
-  }
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": "24.21.0",
+    "pnpm": "12.8.2"
+  },
+  "packageManager": "pnpm@12.8.2+sha512.a5941679663d952c5f0ecc38ba98af98b4dc01b95780354f6894f2f873973cef2f7e2989d7db3ee5393938ae21f62fe06bcdf685d475ddad829a62095d2b8b11"
 }

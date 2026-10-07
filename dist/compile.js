@@ -1,15 +1,15 @@
-import * as core from '@actions/core';
-import * as available from './available.js';
-import * as child from 'child_process';
-import * as path from 'path';
-import * as z from 'zod';
-const binaryCerbos = 'cerbos';
+import * as child from "child_process";
+import * as path from "path";
+import * as core from "@actions/core";
+import * as z from "zod";
+import * as available from "./available.js";
+const binaryCerbos = "cerbos";
 const compileFailureErrorCode = 3;
 const testFailureErrorCode = 4;
-const workspaceEnvKey = 'GITHUB_WORKSPACE';
+const workspaceEnvKey = "GITHUB_WORKSPACE";
 const argsSchema = z.object({
     policiesDir: z.string().nonempty(),
-    testsDir: z.string().optional()
+    testsDir: z.string().optional(),
 });
 const validateArgs = (args) => {
     return argsSchema.parse(args);
@@ -17,7 +17,7 @@ const validateArgs = (args) => {
 export const compile = async (args) => {
     args = validateArgs(args);
     const av = await available.available({
-        binary: binaryCerbos
+        binary: binaryCerbos,
     });
     if (!av.inPath) {
         core.setFailed(`Failed to find binary ${binaryCerbos} in PATH, please add https://github.com/cerbos/cerbos-setup-action action to your workflow.`);
@@ -31,13 +31,13 @@ export const compile = async (args) => {
     const absPoliciesDir = path.join(workspaceDir, args.policiesDir);
     core.info(`Policies directory is set to ${absPoliciesDir}`);
     let command = `${av.path} compile ${absPoliciesDir}`;
-    if (args.testsDir && args.testsDir !== '') {
+    if (args.testsDir && args.testsDir !== "") {
         const absTestsDir = path.join(workspaceDir, args.testsDir);
         core.info(`Tests directory is set to ${absTestsDir}`);
         command += ` --tests ${absTestsDir}`;
     }
     else {
-        core.info('Tests directory is not set');
+        core.info("Tests directory is not set");
     }
     core.info(`The command to run is: ${command}`);
     core.startGroup(`The results for the command ${command}`);
